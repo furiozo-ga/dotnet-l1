@@ -65,7 +65,7 @@ jobs:
   condition: failed()
   pool:
     name: p1
-  container:
-    image: furiozoga/dotnetsdk:latest
-    mapDockerSocket: true
+  #container:
+  #  image: furiozoga/dotnetsdk:latest
+  #  mapDockerSocket: true
   steps: ${{ parameters.theSteps }}
