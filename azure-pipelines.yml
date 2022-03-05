@@ -6,6 +6,44 @@
 trigger:
 - master
 
+parameters:
+  - name: theSteps
+    type: stepList
+    default:
+    - checkout: self
+      clean: false
+      persistCredentials: true
+
+    - bash: echo Hello, world! bash
+      displayName: 'Run a one-line script'
+
+    - bash: |
+        echo Add other tasks to build, test, and deploy your project.
+        echo See https://aka.ms/yaml xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+        #npm install
+        uname -a
+        echo $(System.AccessToken)
+        git config -l
+        cat .git/config
+        cat /etc/issue
+        #cat /proc/cpuinfo
+        free
+        node -v
+        npm -v
+        npx -v
+        npx semantic-release -v
+        npm ls -g
+        npx semantic-release --no-ci
+      displayName: 'Run a multi-line script'
+
+
+    - task: Bash@3
+      inputs:
+        targetType: 'inline'
+        script: |
+          # Write your commands here
+          echo 'Hello world 2'
+        failOnStderr: true
 pool:
   name: p1
 #  vmImage: ubuntu-latest
@@ -16,38 +54,18 @@ pool:
 #container: furiozoga/semantic-release:0.0.1
 #container: furiozoga/dotnetsdk:latest
 
-steps:
-- checkout: self
-  clean: false
-  persistCredentials: true
+jobs:
+- job: azure_hosted
+  pool:
+    vmImage: ubuntu-latest
+  steps: &steps
 
-- bash: echo Hello, world! bash
-  displayName: 'Run a one-line script'
-
-- bash: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-    #npm install
-    uname -a
-    echo $(System.AccessToken)
-    git config -l
-    cat .git/config
-    cat /etc/issue
-    #cat /proc/cpuinfo
-    free
-    node -v
-    npm -v
-    npx -v
-    npx semantic-release -v
-    npm ls -g
-    npx semantic-release --no-ci
-  displayName: 'Run a multi-line script'
-
-
-- task: Bash@3
-  inputs:
-    targetType: 'inline'
-    script: |
-      # Write your commands here
-      echo 'Hello world 2'
-    failOnStderr: true
+- job: self_hosted
+  dependsOn: azure_hosted
+  condition: failed()
+  pool:
+    name: p1
+  container:
+    image: furiozoga/dotnetsdk:latest
+    mapDockerSocket: true
+  steps: *steps
