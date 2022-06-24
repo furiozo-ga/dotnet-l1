@@ -29,7 +29,7 @@ parameters:
         which dotnet
         dotnet --list-runtimes
         dotnet --list-sdks
-        ls -lR $(Agent.ToolsDirectory)/dotnet
+        ls -lR $(Agent.ToolsDirectory) /home/vsts/.dotnet/tools
       displayName: 'Run a one-line script'
 
     - bash: |
