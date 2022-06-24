@@ -16,7 +16,7 @@ parameters:
 
     - bash: set
     - task: UseDotNet@2
-      displayName: 'Use .NET Core sdk'
+      displayName: 'Use .NET Core runtime'
       inputs:
         packageType: 'runtime'
         version: '3.1.25'
@@ -25,9 +25,8 @@ parameters:
     - task: UseDotNet@2
       displayName: 'Use .NET Core sdk'
       inputs:
-        packageType: 'runtime'
-        version: '3.1.25'
-        #installationPath: '/usr/share/dotnet'
+        packageType: 'sdk'
+        version: '3.1.x'
         performMultiLevelLookup: true
     
 
