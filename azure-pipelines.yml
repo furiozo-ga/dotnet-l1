@@ -24,13 +24,17 @@ parameters:
         performMultiLevelLookup: true
 
     - bash: |
-        cp -a /usr/share/dotnet/dotnet $(Agent.ToolsDirectory)/dotnet/
-        set
+        cp -a /usr/share/dotnet/dotnet $(Agent.ToolsDirectory)/dotnet/dotnet3
+        #set
         echo PATH=$PATH
-        which dotnet
+        which dotnet dotnet3
+        echo ===== main
         dotnet --list-runtimes
         dotnet --list-sdks
-        ls -lR $(Agent.ToolsDirectory)/dotnet /home/vsts/.dotnet/tools
+        echo ===== dotnet3
+        dotnet3 --list-runtimes
+        dotnet3 --list-sdks
+        #ls -lR $(Agent.ToolsDirectory)/dotnet /home/vsts/.dotnet/tools
       displayName: 'Run a one-line script'
 
     - bash: |
