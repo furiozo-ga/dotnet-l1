@@ -22,6 +22,8 @@ parameters:
         performMultiLevelLookup: true
 
     - bash: |
+        echo PATH=$PATH
+        which dotnet
         dotnet --list-runtimes
         dotnet --list-sdks
         ls -lR $(Agent.ToolsDirectory)/dotnet
