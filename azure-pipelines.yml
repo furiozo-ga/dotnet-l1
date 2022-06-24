@@ -22,7 +22,7 @@ parameters:
         performMultiLevelLookup: true
 
     - bash: |
-        dotnet --list-runtmes
+        dotnet --list-runtimes
         dotnet --list-sdks
         ls -lR $(Agent.ToolsDirectory)/dotnet
       displayName: 'Run a one-line script'
