@@ -22,15 +22,9 @@ parameters:
         version: '3.1.25'
         #installationPath: '/usr/share/dotnet'
         performMultiLevelLookup: true
-    - task: UseDotNet@2
-      displayName: 'Use .NET Core sdk'
-      inputs:
-        packageType: 'sdk'
-        version: '3.1.x'
-        performMultiLevelLookup: true
-    
 
     - bash: |
+        cp -a /usr/share/dotnet/dotnet $(Agent.ToolsDirectory)/dotnet/
         set
         echo PATH=$PATH
         which dotnet
