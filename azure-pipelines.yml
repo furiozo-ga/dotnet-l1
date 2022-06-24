@@ -14,15 +14,17 @@ parameters:
       clean: false
       persistCredentials: true
 
+    - bash: set
     - task: UseDotNet@2
       displayName: 'Use .NET Core sdk'
       inputs:
         packageType: 'runtime'
         version: '3.1.25'
-        installationPath: '/usr/share/dotnet'
+        #installationPath: '/usr/share/dotnet'
         performMultiLevelLookup: true
 
     - bash: |
+        set
         echo PATH=$PATH
         which dotnet
         dotnet --list-runtimes
