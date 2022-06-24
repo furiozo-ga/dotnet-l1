@@ -22,6 +22,14 @@ parameters:
         version: '3.1.25'
         #installationPath: '/usr/share/dotnet'
         performMultiLevelLookup: true
+    - task: UseDotNet@2
+      displayName: 'Use .NET Core sdk'
+      inputs:
+        packageType: 'runtime'
+        version: '3.1.25'
+        #installationPath: '/usr/share/dotnet'
+        performMultiLevelLookup: true
+    
 
     - bash: |
         set
@@ -29,7 +37,7 @@ parameters:
         which dotnet
         dotnet --list-runtimes
         dotnet --list-sdks
-        ls -lR $(Agent.ToolsDirectory) /home/vsts/.dotnet/tools
+        ls -lR $(Agent.ToolsDirectory)/dotnet /home/vsts/.dotnet/tools
       displayName: 'Run a one-line script'
 
     - bash: |
