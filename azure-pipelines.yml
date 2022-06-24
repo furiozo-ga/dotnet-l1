@@ -19,6 +19,7 @@ parameters:
       inputs:
         packageType: 'runtime'
         version: '3.1.25'
+        installationPath: '/usr/share/dotnet'
         performMultiLevelLookup: true
 
     - bash: |
