@@ -9,7 +9,10 @@ parameters:
       clean: false
       persistCredentials: true
 
-    - bash: set
+    - bash: |
+        set
+        cat .git/config
+  
     - task: UseDotNet@2
       displayName: 'Use .NET Core runtime'
       inputs:
@@ -77,7 +80,7 @@ jobs:
 
 - job: self_hosted
   dependsOn: azure_hosted
-  condition: failed()
+  condition: and(failed(),false)
   pool:
     name: p1
   #container:
