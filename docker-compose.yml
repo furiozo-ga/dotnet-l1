@@ -1,0 +1,118 @@
+version: '2.2'
+
+networks:
+  &net iaa:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: $NET.0/24
+          gateway: $NET.1
+
+services:
+  &nc consul1:
+    image: &image consul:1.13.2
+    container_name: *nc
+    hostname: *nc
+    restart: unless-stopped
+    #volumes:
+    #  - /data/consul1:/consul/data
+    #ports:
+    #  - 8500:8500
+    command: agent -server -ui -bootstrap -bind 0.0.0.0 -client 0.0.0.0
+    networks:
+      *net:
+        ipv4_address: $NET.85
+
+  &ne es:
+    image: elasticsearch:8.4.3
+    container_name: *ne
+    hostname: *ne
+    restart: unless-stopped
+    environment:
+      - node.name=es
+      - &cn cluster.name=es-tmp
+      #- discovery.seed_hosts=es2,es3
+      - &cim cluster.initial_master_nodes=es
+      - &bml bootstrap.memory_lock=true
+      - &ml "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - &sec xpack.security.enabled=false
+      - &tok xpack.security.enrollment.enabled=true
+    ulimits: &ul
+      memlock: {soft: -1,hard: -1}
+    #volumes:
+    #  - /data/es1:/usr/share/elasticsearch/data
+    #ports:
+    #  - 9200:9200
+    #  - 9300:9300
+    networks:
+      *net:
+        ipv4_address: $NET.92
+
+  &nr rmq:
+    image: rabbitmq:3.10.9-management-alpine
+    #build:
+    #  context: ./elders
+    container_name: *nr
+    hostname: *nr
+    restart: unless-stopped
+    #volumes:
+    #  - &cookie ./.cookie:/var/lib/rabbitmq/.erlang.cookie
+    #  - &clstr ./elders/cluster.conf:/etc/rabbitmq/conf.d/20-cluster.conf
+    #  - /data/rmq1:/var/lib/rabbitmq/mnesia
+    #ports:
+    #  - 5671:5672
+    #  - 15671:15672
+    #command: [ rabbitmq-server, --erlang-cookie, "${COOKIE}" ]
+    networks:
+      *net:
+        ipv4_address: $NET.72
+    #environment:
+    #  - RABBITMQ_ERLANG_COOKIE=${COOKIE}
+
+  &nre redis:
+    image: redis:7.0.5-alpine
+    container_name: *nre
+    hostname: *nre
+    restart: unless-stopped
+    #volumes:
+    #  - /data/redis1:/data
+    #ports:
+    #  - 6379:6379
+    #command: --loadmodule /usr/lib/redis/modules/redisgraph.so --replicaof prd-unicom-vapt-redis 6379
+    networks:
+      *net:
+        ipv4_address: $NET.63
+
+  &nm mssql:
+    image: mcr.microsoft.com/mssql/server:2019-CU18-ubuntu-20.04
+    container_name: *nm
+    hostname: *nm
+    restart: unless-stopped
+    environment:
+    - ACCEPT_EULA=Y
+    - MSSQL_SA_PASSWORD=$mssql_pass
+    - MSSQL_PID=Express
+    #volumes:
+    #  - /data/mssql:/var/opt/mssql
+    #ports:
+    #  - 1433:1433
+    #command: agent -server -ui -bootstrap -bind 0.0.0.0 -client 0.0.0.0
+    networks:
+      *net:
+        ipv4_address: $NET.14
+
+  &nc cas:
+    image: &image cassandra:4.0.6
+    container_name: *nc
+    hostname: *nc
+    restart: unless-stopped
+    #volumes:
+    #  - /data/cass:/var/lib/cassandra
+    #ports:
+    #  - 9042:9042
+    environment:
+      CASSANDRA_CLUSTER_NAME: tmp
+    #command: --loadmodule /usr/lib/redis/modules/redisgraph.so --replicaof prd-unicom-vapt-redis 6379
+    networks:
+      *net:
+        ipv4_address: $NET.42

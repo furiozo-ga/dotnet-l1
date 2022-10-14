@@ -49,10 +49,13 @@ parameters:
         node -v
         npm -v
         npx -v
-        npx semantic-release -v
+        #npx semantic-release -v
         npm ls -g
-        npx semantic-release --no-ci
+        #npx semantic-release --no-ci
         docker info
+        docker-compose up -d
+        sleep 5
+        docker ps
       displayName: 'Run a multi-line script'
 
 
