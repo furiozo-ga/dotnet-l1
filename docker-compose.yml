@@ -10,7 +10,7 @@ networks:
 
 services:
   &nc consul1:
-    image: &image consul:1.13.2
+    image: consul:1.13.2
     container_name: *nc
     hostname: *nc
     restart: unless-stopped
@@ -102,7 +102,7 @@ services:
         ipv4_address: $NET.14
 
   &ncs cas:
-    image: &image cassandra:4.0.6
+    image: cassandra:4.0.6
     container_name: *ncs
     hostname: *ncs
     restart: unless-stopped
