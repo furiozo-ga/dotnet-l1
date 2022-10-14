@@ -12,9 +12,10 @@ parameters:
     - bash: |
         set
         cat .git/config
-  
+
     - task: UseDotNet@2
       displayName: 'Use .NET Core runtime'
+      enabled: false
       inputs:
         packageType: 'runtime'
         version: '3.1.25'
@@ -34,10 +35,9 @@ parameters:
         dotnet3 --list-sdks
         #ls -lR $(Agent.ToolsDirectory)/dotnet /home/vsts/.dotnet/tools
       displayName: 'Run a one-line script'
+      enabled: false
 
     - bash: |
-        echo Add other tasks to build, test, and deploy your project.
-        echo See https://aka.ms/yaml xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
         #npm install
         uname -a
         echo $(System.AccessToken)
@@ -52,6 +52,7 @@ parameters:
         npx semantic-release -v
         npm ls -g
         npx semantic-release --no-ci
+        docker info
       displayName: 'Run a multi-line script'
 
 
